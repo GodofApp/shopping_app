@@ -2,11 +2,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
-import 'package:shopping_app/app_main.dart';
+import 'package:shopping_app/screens/app_main.dart';
 import 'package:shopping_app/controller/cart_controller.dart';
 import 'package:shopping_app/routes/routes.dart';
 
-import 'firebase_options.dart';
+import 'config/firebase_options.dart';
 import 'controller/auth_controller.dart';
 
 Future<void> main() async {

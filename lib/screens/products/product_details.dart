@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:shopping_app/controller/cart_controller.dart';
+import 'package:shopping_app/screens/products/shopping_cart.dart';
 import 'package:shopping_app/utils/rounded_button.dart';
 
 import '../../controller/auth_controller.dart';
@@ -26,9 +27,51 @@ class ProductDetails extends StatelessWidget {
       appBar: AppBar(
         title: TextLanCommon(Constants.productDetailsText,fontSize: 24,fontWeight: FontWeight.bold,),
         backgroundColor: Colors.blue,
+        iconTheme: IconThemeData(color: Colors.black),
+        elevation: 0,
+        actions: [
+          IconButton(
+              icon: const Icon(Icons.shopping_cart),
+              onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (context) => Container(
+                    color: Colors.white,
+                    child: ShoppingCartWidget(),
+                  ),
+                );
+              }),
+          IconButton(
+              icon: const Icon(Icons.logout),
+              onPressed: () {
+                AuthController.instance.signOut(context).then((value){
+                  Constants.userId = "";
+                  Constants.cartValues.clear();
+                });
+              }),
+        ],
       ),
       body: Stack(
         children: [
+          InkWell(
+            onTap: (){
+              CartController.instance.addProductToCart(product);
+            },
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                width: Get.width,
+                height: 50,
+                color: Colors.blue,
+                alignment: Alignment.center,
+                child: TextLanCommon(
+                  Constants.cartText,
+                  style: TextStyle(height: 1.5, color: Colors.white,fontWeight: FontWeight.w900,
+                      fontSize: 20),
+                ),
+              ),
+            ),
+          ),
           SingleChildScrollView(
             physics: ClampingScrollPhysics(),
             child: Column(
@@ -104,26 +147,6 @@ class ProductDetails extends StatelessWidget {
               ],
             ),
           ),
-
-          InkWell(
-            onTap: (){
-              CartController.instance.addProductToCart(product);
-            },
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                  width: Get.width,
-                  height: 50,
-                color: Colors.blue,
-                alignment: Alignment.center,
-                child: TextLanCommon(
-                  Constants.cartText,
-                  style: TextStyle(height: 1.5, color: Colors.white,fontWeight: FontWeight.w900,
-                      fontSize: 20),
-                ),
-              ),
-            ),
-          )
         ],
       ),
     );

@@ -76,6 +76,7 @@ class AuthController extends GetxController {
 
         final User? user = authResult.user;
 
+        //check if user is existing or not
         if (authResult.additionalUserInfo!.isNewUser) {
           Loader.hide();
           saveUserInfoToFirebase(user);
@@ -87,13 +88,6 @@ class AuthController extends GetxController {
           listenToUser();
           Get.offAllNamed(Routes.HOME);
         }
-
-        /*await auth.signInWithCredential(credential).then((value) => {
-          if(value.user != null){
-            if(value.user!.uid == firebaseUser.value!.uid)
-
-          }
-        });*/
       }
     } catch (e) {
       Get.snackbar(
@@ -171,6 +165,7 @@ class AuthController extends GetxController {
   }
 
   void saveUserInfoToFirebase(User? firebaseUser) {
+    //save user info once registered
     FirebaseFirestore.instance.collection("users").doc(firebaseUser!.uid).set({
       'id': firebaseUser.uid,
       'name': firebaseUser.email!.trim(),
@@ -181,13 +176,6 @@ class AuthController extends GetxController {
       userModel.bindStream(listenToUser()),
     });
   }
-
-  /*void readDataFromFireBase(User? firebaseUserNew){
-    FirebaseFirestore.instance.collection(usersCollection).doc(firebaseUserNew!.uid).get().then((value) => {
-      Constants.userId =  value.get("id"),
-      Constants.cartValues = value.get("cart"),
-    });
-  }*/
 
   void showSnackbar(String message, [int seconds = 2]) {
     GetSnackBar(
@@ -226,11 +214,14 @@ class AuthController extends GetxController {
 
     DocumentSnapshot userDoc = await users.doc(firebaseUser.value!.uid).get();
 
+    // Get the 'cart' array from the document
     List<dynamic> cart = userDoc['cart'];
 
+    // Find the index of the item with the specified cartItemId
     int indexOfItemToUpdate = cart.indexWhere((item) => item['id'] == cartItemId);
 
     if (indexOfItemToUpdate != -1) {
+      // Update the quantity of the item at the found index
       cart[indexOfItemToUpdate]['quantity'] = newQuantity;
       cart[indexOfItemToUpdate]['cost'] = price! * newQuantity!;
 

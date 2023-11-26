@@ -49,7 +49,7 @@ class LoginPage extends StatelessWidget {
               child:  TextField(
                 controller: phoneMailEditingController,
                 keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   counterText: "",
                   border: InputBorder.none,
                   hintText: "Email",

@@ -16,6 +16,8 @@ class CartController extends GetxController{
   @override
   void onReady() {
     super.onReady();
+
+    // listen to changes of cart price change w.e.f to quantity
     ever(AuthController.instance.userModel, changeCartTotalPrice);
   }
 
@@ -64,6 +66,7 @@ class CartController extends GetxController{
     }
   }
 
+  //check cart item is present or not
   bool _isItemAlreadyAdded(ProductModel product) =>
       AuthController.instance.userModel.value.cart!
           .where((item) => item.productId == product.id)
@@ -73,14 +76,12 @@ class CartController extends GetxController{
     if(item.quantity == 1){
       removeCartItem(item);
     }else{
-      // removeCartItem(item);
       item.quantity = item.quantity! - 1;
       AuthController.instance.updateQuantity(item.id,item.quantity,item.price);
     }
   }
 
   void increaseQuantity(CartItemModel item){
-     // removeCartItem(item);
     item.quantity = item.quantity! + 1;
     AuthController.instance.updateQuantity(item.id,item.quantity,item.price);
   }

@@ -60,15 +60,33 @@ class CartItemWidget extends StatelessWidget {
                 )
               ],
             )),
-        Padding(
-          padding:
-          const EdgeInsets.all(14),
-          child: TextLanCommon(
-            "\u{20B9}${cartItem.cost}",
-            style: const TextStyle(fontSize: 22,
-                fontWeight: FontWeight.bold),
-          ),
-        ),
+
+
+        Column(
+          children: [
+            Padding(
+              padding:
+              const EdgeInsets.all(14),
+              child: TextLanCommon(
+                "\u{20B9}${cartItem.cost}",
+                style: const TextStyle(fontSize: 22,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+            
+            InkWell(
+                onTap: (){
+                  CartController.instance.removeCartItem(cartItem);
+                },
+                child: TextLanCommon("Remove",
+                  style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.red),
+                )
+            )
+          ],
+        )
       ],
     );
   }

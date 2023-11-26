@@ -7,6 +7,7 @@ import 'package:shopping_app/controller/auth_controller.dart';
 import 'package:shopping_app/controller/cart_controller.dart';
 import 'package:shopping_app/utils/text_lan_common.dart';
 
+import '../../model/cart_item.dart';
 import 'cart_item_widgets.dart';
 
 class ShoppingCartWidget extends StatelessWidget {
@@ -28,11 +29,14 @@ class ShoppingCartWidget extends StatelessWidget {
             SizedBox(
               height: 5,
             ),
-            Obx(()=>Column(
-              children: AuthController.instance.userModel.value.cart!
-                  .map((cartItem) => CartItemWidget(cartItem: cartItem))
-                  .toList(),
-            )),
+
+            Obx(() => ListView.builder(
+              shrinkWrap: true,
+              itemCount: AuthController.instance.userModel.value.cart!.length,
+              itemBuilder: (context, index) {
+                CartItemModel cartItem = AuthController.instance.userModel.value.cart!.elementAt(index);
+                return CartItemWidget(cartItem: cartItem);
+              },))
           ],
         ),
         Positioned(

@@ -24,7 +24,7 @@ class CartController extends GetxController{
       if (_isItemAlreadyAdded(product)) {
         Get.snackbar("Check your cart", "${product.name} is already added");
       } else {
-        String itemId = const Uuid().toString();
+        String itemId = const Uuid().v1().toString();
         AuthController.instance.updateUserData({
           "cart": FieldValue.arrayUnion([
             {
@@ -73,19 +73,15 @@ class CartController extends GetxController{
     if(item.quantity == 1){
       removeCartItem(item);
     }else{
-      removeCartItem(item);
+      // removeCartItem(item);
       item.quantity = item.quantity! - 1;
-      AuthController.instance.updateUserData({
-        "cart": FieldValue.arrayUnion([item.toJson()])
-      });
+      AuthController.instance.updateQuantity(item.id,item.quantity,item.price);
     }
   }
 
   void increaseQuantity(CartItemModel item){
-    removeCartItem(item);
+     // removeCartItem(item);
     item.quantity = item.quantity! + 1;
-    AuthController.instance.updateUserData({
-      "cart": FieldValue.arrayUnion([item.toJson()])
-    });
+    AuthController.instance.updateQuantity(item.id,item.quantity,item.price);
   }
 }

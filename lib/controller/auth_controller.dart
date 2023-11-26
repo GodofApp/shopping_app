@@ -7,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -15,7 +16,7 @@ import 'package:shopping_app/utils/constants.dart';
 import '../model/user_model.dart';
 import '../routes/app_routes.dart';
 
-class AuthController extends GetxController{
+class AuthController extends GetxController {
 
   static AuthController instance = Get.find<AuthController>();
   late Rx<User?> firebaseUser;
@@ -69,12 +70,30 @@ class AuthController extends GetxController{
           idToken: googleSignInAuthentication.idToken,
         );
 
-        await auth.signInWithCredential(credential).then((value) => {
-          if(value.user != null){
-            saveUserInfoToFirebase(value.user),
-            Get.offAllNamed(Routes.HOME),
+        Loader.show(Get.overlayContext!);
+        final UserCredential authResult = await auth.signInWithCredential(
+            credential);
+
+        final User? user = authResult.user;
+
+        if (authResult.additionalUserInfo!.isNewUser) {
+          Loader.hide();
+          saveUserInfoToFirebase(user);
+          if (user != null) {
+            Get.offAllNamed(Routes.HOME);
           }
-        });
+        } else {
+          Loader.hide();
+          listenToUser();
+          Get.offAllNamed(Routes.HOME);
+        }
+
+        /*await auth.signInWithCredential(credential).then((value) => {
+          if(value.user != null){
+            if(value.user!.uid == firebaseUser.value!.uid)
+
+          }
+        });*/
       }
     } catch (e) {
       Get.snackbar(
@@ -84,7 +103,6 @@ class AuthController extends GetxController{
       );
       print(e.toString());
     }
-
   }
 
   bool isEmailVerified(String emailId) {
@@ -105,7 +123,7 @@ class AuthController extends GetxController{
   }
 
 
-  Future<UserCredential> register(String email,password) async{
+  Future<UserCredential> register(String email, password) async {
     try {
       userCredential = await auth.createUserWithEmailAndPassword(
           email: email, password: password);
@@ -127,7 +145,8 @@ class AuthController extends GetxController{
 
   Future<UserCredential> login(String email, password) async {
     try {
-      userCredential = await auth.signInWithEmailAndPassword(email: email, password: password);
+      userCredential =
+      await auth.signInWithEmailAndPassword(email: email, password: password);
     } catch (firebaseAuthException) {
       Get.snackbar("User", "User message",
           snackPosition: SnackPosition.BOTTOM,
@@ -145,19 +164,20 @@ class AuthController extends GetxController{
   }
 
   Future signOut(BuildContext context) async {
-    await auth.signOut().then((value) => {
+    await auth.signOut().then((value) =>
+    {
       Get.offAllNamed(Routes.LOGIN),
     });
   }
 
-  void saveUserInfoToFirebase(User? firebaseUser){
-
+  void saveUserInfoToFirebase(User? firebaseUser) {
     FirebaseFirestore.instance.collection("users").doc(firebaseUser!.uid).set({
       'id': firebaseUser.uid,
       'name': firebaseUser.email!.trim(),
       'email': firebaseUser.email!.trim(),
-      'cart':[]
-    }).then((value) => {
+      'cart': []
+    }).then((value) =>
+    {
       userModel.bindStream(listenToUser()),
     });
   }
@@ -186,8 +206,8 @@ class AuthController extends GetxController{
         .show();
   }
 
-  Stream<UserModel> listenToUser(){
-   return FirebaseFirestore.instance
+  Stream<UserModel> listenToUser() {
+    return FirebaseFirestore.instance
         .collection(usersCollection)
         .doc(firebaseUser.value!.uid)
         .snapshots()
@@ -199,6 +219,29 @@ class AuthController extends GetxController{
         .collection(usersCollection)
         .doc(firebaseUser.value!.uid)
         .update(data);
+  }
+
+  updateQuantity(String? cartItemId,int? newQuantity,double? price) async {
+    CollectionReference users = FirebaseFirestore.instance.collection('users');
+
+    DocumentSnapshot userDoc = await users.doc(firebaseUser.value!.uid).get();
+
+    List<dynamic> cart = userDoc['cart'];
+
+    int indexOfItemToUpdate = cart.indexWhere((item) => item['id'] == cartItemId);
+
+    if (indexOfItemToUpdate != -1) {
+      cart[indexOfItemToUpdate]['quantity'] = newQuantity;
+      cart[indexOfItemToUpdate]['cost'] = price! * newQuantity!;
+
+      // Update the 'cart' array in the document
+      await users.doc(firebaseUser.value!.uid).update({
+        'cart': cart,
+      });
+
+    } else {
+
+    }
   }
 
 }

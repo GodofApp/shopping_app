@@ -3,6 +3,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shopping_app/controller/cart_controller.dart';
 import 'package:shopping_app/routes/app_routes.dart';
 import 'package:shopping_app/utils/text_lan_common.dart';
 
@@ -41,6 +42,8 @@ class SingleProductWidget extends StatelessWidget {
                   child: Image.network(
                     product.image!,
                     width: Get.width,
+                    height: 125,
+                    fit: BoxFit.fill,
                   )),
             ),
             TextLanCommon(
@@ -67,11 +70,11 @@ class SingleProductWidget extends StatelessWidget {
                 SizedBox(
                   width: 30,
                 ),
-                /*IconButton(
+                IconButton(
                     icon: Icon(Icons.add_shopping_cart),
                     onPressed: () {
-                      cartController.addProductToCart(product);
-                    })*/
+                      CartController.instance.addProductToCart(product);
+                    })
               ],
             ),
           ],

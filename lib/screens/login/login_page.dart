@@ -90,16 +90,22 @@ class LoginPage extends StatelessWidget {
                   title: Constants.loginText,
                   onPressed: () {
                     if(phoneMailEditingController.text.isNotEmpty && passwordEditingController.text.isNotEmpty){
-                      if(AuthController.instance.isEmailVerified(phoneMailEditingController.text)){
-                        AuthController.instance.login(phoneMailEditingController.text, passwordEditingController.text).then((value) => {
-                          if(value.additionalUserInfo != null){
-                            AuthController.instance.userModel.bindStream(AuthController.instance.listenToUser()),
-                            Get.offAllNamed(Routes.HOME),
-                          }
-                        });
-                      }else{
+                      if(!AuthController.instance.isEmailVerified(phoneMailEditingController.text)){
                         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Enter valid email")));
+                        return;
                       }
+
+                      if(passwordEditingController.text.length < 6){
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Password length must be 6")));
+                        return;
+                      }
+
+                      AuthController.instance.login(phoneMailEditingController.text, passwordEditingController.text).then((value) => {
+                        if(value.additionalUserInfo != null){
+                          AuthController.instance.userModel.bindStream(AuthController.instance.listenToUser()),
+                          Get.offAllNamed(Routes.HOME),
+                        }
+                      });
                     }else{
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Fields must not be empty")));
                     }

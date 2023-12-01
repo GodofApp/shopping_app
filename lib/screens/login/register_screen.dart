@@ -92,18 +92,24 @@ class RegisterScreen extends StatelessWidget {
                 title: 'Sign Up',
                 onPressed: () {
                   if(fisrtName.text.isNotEmpty && phoneOrEmail.text.isNotEmpty && passwordEditingController.text.isNotEmpty) {
-                    if (AuthController.instance.isEmailVerified(
-                        phoneOrEmail.text)) {
-                      AuthController.instance.register(
-                          phoneOrEmail.text, passwordEditingController.text).then((value) => {
-                        if(value.additionalUserInfo != null){
-                          AuthController.instance.saveUserInfoToFirebase(value.user),
-                          Get.offAllNamed(Routes.HOME),
-                        }
-                      });
-                    }else{
+
+                    if(!AuthController.instance.isEmailVerified(phoneOrEmail.text)){
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Enter valid email")));
+                      return;
                     }
+
+                    if(passwordEditingController.text.length < 6){
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Password length must be 6")));
+                      return;
+                    }
+
+                    AuthController.instance.register(
+                        phoneOrEmail.text, passwordEditingController.text).then((value) => {
+                      if(value.additionalUserInfo != null){
+                        AuthController.instance.saveUserInfoToFirebase(value.user),
+                        Get.offAllNamed(Routes.HOME),
+                      }
+                    });
                   }else{
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Fields must not be empty")));
                   }

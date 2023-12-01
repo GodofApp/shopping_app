@@ -23,7 +23,7 @@ class ProductDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: Constants.productDetailsText,),
+      appBar: CustomAppBar(title: Constants.productDetailsText,showCartIcon: true,),
       body: Stack(
         children: [
           ListView(

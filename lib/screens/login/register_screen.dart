@@ -74,13 +74,15 @@ class RegisterScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                     border: Border.all(width: 1, color: Colors.grey),
                     borderRadius:  BorderRadius.circular(10)),
-                child:   TextField(
+                child:   TextFormField(
                   controller: passwordEditingController,
                   obscureText: true,
+                  maxLength: 6,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: Constants.passwordTextInput,
+                    counterText: "",
                   ),
                 ),
               ),

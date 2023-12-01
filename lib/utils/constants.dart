@@ -19,6 +19,7 @@ class Constants{
   static var productText = 'Home';
   static var productDetailsText = 'Details';
   static var cartText = 'Add to Cart';
+  static var checkoutText = 'Checkout';
 
   //user details
   static var userId = "";

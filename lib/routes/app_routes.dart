@@ -1,3 +1,5 @@
+import 'package:shopping_app/screens/products/checkout_page.dart';
+
 abstract class Routes {
   Routes._();
 
@@ -5,6 +7,7 @@ abstract class Routes {
   static const LOGIN = Paths.LOGIN;
   static const REGISTER = Paths.REGISTER;
   static const DETAIL = Paths.DETAIL;
+  static const CHECKOUTPAGE = Paths.CHECKOUT;
 }
 
 abstract class Paths {
@@ -12,4 +15,5 @@ abstract class Paths {
   static const HOME = '/home';
   static const REGISTER = '/register';
   static const DETAIL = '/details';
+  static const CHECKOUT = '/checkoutPage';
 }

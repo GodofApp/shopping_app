@@ -18,7 +18,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: Constants.productText,),
+      appBar: CustomAppBar(title: Constants.productText,showCartIcon: true,),
       body: Padding(
         padding: const EdgeInsets.only(left: 10,right: 10),
         child: Container(

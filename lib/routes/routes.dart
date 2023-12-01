@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:shopping_app/screens/app_main.dart';
 import 'package:shopping_app/screens/login/login_page.dart';
 import 'package:shopping_app/screens/login/register_screen.dart';
+import 'package:shopping_app/screens/products/checkout_page.dart';
 import 'package:shopping_app/screens/products/home_page.dart';
 import 'package:shopping_app/screens/products/product_details.dart';
 
@@ -15,6 +16,6 @@ class Routes{
     GetPage(name: Paths.REGISTER, page: () => RegisterScreen()),
 
     GetPage(name: Paths.DETAIL, page: () => ProductDetails()),
-    GetPage(name: '/cart', page: () => AppMain()),
+    GetPage(name: Paths.CHECKOUT, page: () => CheckoutPage()),
   ];
 }

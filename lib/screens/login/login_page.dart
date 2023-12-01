@@ -71,10 +71,12 @@ class LoginPage extends StatelessWidget {
               child:   TextField(
                 controller: passwordEditingController,
                 obscureText: true,
+                maxLength: 6,
                 keyboardType: TextInputType.emailAddress,
                 decoration: const InputDecoration(
                   border: InputBorder.none,
                   hintText: "Password",
+                  counterText: ""
                 ),
               ),
             ),

@@ -8,6 +8,7 @@ import 'package:shopping_app/controller/cart_controller.dart';
 import 'package:shopping_app/utils/text_lan_common.dart';
 
 import '../../model/cart_item.dart';
+import '../../routes/app_routes.dart';
 import 'cart_item_widgets.dart';
 
 class ShoppingCartWidget extends StatelessWidget {
@@ -41,15 +42,25 @@ class ShoppingCartWidget extends StatelessWidget {
         ),
         Positioned(
             bottom: 0,
-            child: Container(
-                width: Get.width,
-                height: 50,
-                color: Colors.blue,
-                alignment: Alignment.center,
-                padding: EdgeInsets.all(8),
-                child: Obx(() => TextLanCommon("Pay (\u{20B9}${CartController.instance.totalCartPrice.value.toStringAsFixed(2)})",
-                  style: const TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
-                ),)
+            child: InkWell(
+              onTap: (){
+                if(AuthController.instance.userModel.value.cart!.isNotEmpty) {
+                  Get.back();
+                  Get.toNamed(Routes.CHECKOUTPAGE);
+                }else{
+                  Get.snackbar("Oops", "Your cart seems empty!!");
+                }
+              },
+              child: Container(
+                  width: Get.width,
+                  height: 50,
+                  color: Colors.blue,
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.all(8),
+                  child:TextLanCommon("Proceed to checkout",
+                    style: const TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
+                  ),
+              ),
             ))
       ],
     );

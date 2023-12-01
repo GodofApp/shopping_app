@@ -9,8 +9,9 @@ import 'constants.dart';
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   final String title;
+  final bool showCartIcon;
 
-  const CustomAppBar({super.key, required this.title});
+  const CustomAppBar({super.key, required this.title, required this.showCartIcon});
 
   @override
   // TODO: implement preferredSize
@@ -24,17 +25,20 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       iconTheme: IconThemeData(color: Colors.black),
       elevation: 0,
       actions: [
-        IconButton(
-            icon: const Icon(Icons.shopping_cart),
-            onPressed: () {
-              showModalBottomSheet(
-                context: context,
-                builder: (context) => Container(
-                  color: Colors.white,
-                  child: ShoppingCartWidget(),
-                ),
-              );
-            }),
+        Visibility(
+          visible: showCartIcon,
+          child: IconButton(
+              icon: const Icon(Icons.shopping_cart),
+              onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (context) => Container(
+                    color: Colors.white,
+                    child: ShoppingCartWidget(),
+                  ),
+                );
+              }),
+        ),
         IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () {

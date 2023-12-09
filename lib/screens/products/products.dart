@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:shopping_app/controller/product_controller.dart';
 import 'package:shopping_app/model/products_model.dart';
 import 'package:shopping_app/screens/products/single_product.dart';
@@ -18,17 +19,20 @@ class ProductsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(()=> productController.isLoading.value ?
-         Center(child: GridView.builder(
-           itemCount: 10,
-           padding: const EdgeInsets.all(10),
-           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-           crossAxisCount: 2, // Number of columns
-             mainAxisSpacing: 4.0,
-             crossAxisSpacing: 10,
-             childAspectRatio: .70,
-         ), itemBuilder: (context,index){
+         Center(child: Shimmer.fromColors(
+            baseColor: Colors.grey.shade300,
+            highlightColor: Colors.grey.shade100,
+             child: GridView.builder(
+             itemCount: 10,
+             padding: const EdgeInsets.all(10),
+             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+               crossAxisCount: 2, // Number of columns
+               mainAxisSpacing: 4.0,
+               crossAxisSpacing: 10,
+               childAspectRatio: .70,
+             ), itemBuilder: (context,index){
            return const LoadingSkeleton();
-         }))
+         }),))
         : GridView.count(
         shrinkWrap: true,
         crossAxisCount: 2,
